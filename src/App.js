@@ -10,6 +10,7 @@ import About from './pages/About/About';
 import Contacts from './pages/Contacts/Contacts';
 import TourSelection from './pages/TourSelection/TourSelection';
 import Partners from './pages/Partners/Partners';
+import Login from './pages/Login/Login';
 import GlobalStyles from './styles/GlobalStyles';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/contacts" element={<Contacts />} />
         <Route path="/tour-selection" element={<TourSelection />} />
         <Route path="/partners" element={<Partners />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </Router>
