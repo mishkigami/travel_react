@@ -82,7 +82,6 @@ const TourForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
     // Здесь будет логика отправки формы
   };
 

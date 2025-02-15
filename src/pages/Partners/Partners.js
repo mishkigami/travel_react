@@ -160,8 +160,6 @@ const Partners = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Здесь будет логика отправки формы
-    console.log('Partnership form submitted');
   };
 
   return (

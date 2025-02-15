@@ -172,7 +172,6 @@ const MapContainer = styled.div`
 const Contacts = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted');
   };
 
   // Координаты вашего офиса (замените на свои)
