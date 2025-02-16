@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
-import { loginUser } from '../../services/api';
+import { loginUser, getTourOffers } from '../../services/api';
 import {
   LoginContainer,
   LoginForm,
@@ -10,6 +10,7 @@ import {
   Button,
   ErrorMessage,
 } from './Login.styles';
+import Cookies from 'js-cookie';
 
 const RECAPTCHA_SITE_KEY = '6LfkJrgqAAAAAIlr-mFhI3cijrjDECMsyVFj4EL9';
 
@@ -25,7 +26,6 @@ const Login = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const handleRecaptchaChange = (token) => {
-    console.log("ReCAPTCHA value:", token);
     setRecaptchaToken(token);
   };
 
@@ -42,12 +42,21 @@ const Login = () => {
 
     try {
       const response = await loginUser(formData.email, formData.password, recaptchaToken);
-      console.log('Login response:', response);
-      navigate('/');
+      
+      if (response.token) {
+        // Сохраняем токен в куки
+        Cookies.set('token', response.token, { 
+          expires: 7, // срок жизни 7 дней
+          secure: process.env.NODE_ENV === 'production', // secure в production
+          sameSite: 'Lax'
+        });
+        navigate('/admin/tour-offers');
+      } else {
+        throw new Error('Token not found in response');
+      }
     } catch (err) {
-      console.error('Login error:', err);
       setError(err.message || 'Ошибка при входе. Попробуйте снова.');
-      recaptchaRef.current.reset(); // Сбрасываем капчу при ошибке
+      recaptchaRef.current.reset();
       setRecaptchaToken(null);
     } finally {
       setIsLoading(false);
