@@ -2,8 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
+import MainLayout from './layouts/MainLayout';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import Home from './pages/Home/Home';
 import About from './pages/About/About';
@@ -12,6 +11,9 @@ import TourSelection from './pages/TourSelection/TourSelection';
 import Partners from './pages/Partners/Partners';
 import Login from './pages/Login/Login';
 import GlobalStyles from './styles/GlobalStyles';
+import AdminTourOffers from './pages/Admin/TourOffers';
+import AdminTourShow from './pages/Admin/TourOffers/Show';
+import NewTourOffer from './pages/Admin/TourOffers/New';
 
 function App() {
   useEffect(() => {
@@ -26,16 +28,20 @@ function App() {
     <Router>
       <ScrollToTop />
       <GlobalStyles />
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/tour-selection" element={<TourSelection />} />
-        <Route path="/partners" element={<Partners />} />
-        <Route path="/login" element={<Login />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/tour-selection" element={<TourSelection />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
+        
+        <Route path="/admin/tour-offers" element={<AdminTourOffers />} />
+        <Route path="/admin/tour-offers/:id" element={<AdminTourShow />} />
+        <Route path="/admin/tour-offers/new" element={<NewTourOffer />} />
       </Routes>
-      <Footer />
     </Router>
   );
 }
