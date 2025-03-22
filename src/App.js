@@ -14,6 +14,7 @@ import GlobalStyles from './styles/GlobalStyles';
 import AdminTourOffers from './pages/Admin/TourOffers';
 import AdminTourShow from './pages/Admin/TourOffers/Show';
 import NewTourOffer from './pages/Admin/TourOffers/New';
+import AllDestinations from './pages/AllDestinations/AllDestinations';
 
 function App() {
   useEffect(() => {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/admin/tour-offers" element={<AdminTourOffers />} />
         <Route path="/admin/tour-offers/:id" element={<AdminTourShow />} />
         <Route path="/admin/tour-offers/new" element={<NewTourOffer />} />
+        <Route path="/destinations" element={<AllDestinations />} />
       </Routes>
     </Router>
   );
