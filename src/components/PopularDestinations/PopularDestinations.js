@@ -1,8 +1,15 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getDestinations } from '../../services/api';
+import { Link } from 'react-router-dom';
 
 const Section = styled.section`
   padding: 80px 20px;
   background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 32px;
 `;
 
 const Container = styled.div`
@@ -18,8 +25,9 @@ const Title = styled.h2`
 `;
 
 const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 30px;
 `;
 
@@ -29,6 +37,7 @@ const Card = styled.div`
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
+  width: 375px;
 
   &:hover {
     transform: translateY(-5px);
@@ -70,52 +79,68 @@ const Description = styled.p`
 
 const Button = styled.button`
   padding: 10px 20px;
+  width: fit-content;
   background-color: #ff6b6b;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  align-self: center;
 
   &:hover {
     background-color: #ff5252;
   }
 `;
 
+const MoreButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+`;
+
+const MoreButton = styled.button`
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  
+  &:hover {
+    background: #ff5252;
+  }
+`;
+
 const PopularDestinations = () => {
-  const destinations = [
-    {
-      id: 1,
-      title: "Мальдивы",
-      image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?ixlib=rb-4.0.3",
-      price: "от 180 000 ₽",
-      description: "Райский отдых на белоснежных пляжах с кристально чистой водой"
-    },
-    {
-      id: 2,
-      title: "Турция",
-      image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?ixlib=rb-4.0.3",
-      price: "от 75 000 ₽",
-      description: "Всё включено, отличные отели и богатая культурная программа"
-    },
-    {
-      id: 3,
-      title: "Греция",
-      image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?ixlib=rb-4.0.3",
-      price: "от 95 000 ₽",
-      description: "Древняя история, прекрасные острова и средиземноморская кухня"
-    }
-  ];
+  const [destinations, setDestinations] = useState([]);
+
+  const getMostPopularDestinations = async () => {
+    const { data } = await getDestinations(3);
+    console.log(data);
+    setDestinations(data)
+  }
+
+  useEffect(() => {
+    getMostPopularDestinations();
+  }, [])
+
+
+  if(destinations.length === 0) return null;
 
   return (
-    <Section>
+    <Section id="destinations">
       <Container>
         <Title data-aos="fade-up">Популярные направления</Title>
         <Grid>
           {destinations.map((destination, index) => (
             <Card key={destination.id} data-aos="fade-up" data-aos-delay={index * 100}>
               <ImageContainer>
-                <Image src={destination.image} alt={destination.title} />
+                <Image src={destination.image_url} alt={destination.title} />
               </ImageContainer>
               <CardContent>
                 <DestinationTitle>{destination.title}</DestinationTitle>
@@ -126,6 +151,12 @@ const PopularDestinations = () => {
             </Card>
           ))}
         </Grid>
+
+        <MoreButtonWrapper>
+          <MoreButton as={Link} to="/destinations">
+            Еще направления
+          </MoreButton>
+        </MoreButtonWrapper>
       </Container>
     </Section>
   );

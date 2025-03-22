@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.REACT_APP_API_URL;
+export const API_URL = process.env.REACT_APP_API_URL;
 
 export const loginUser = async (email, password, recaptchaToken) => {
   try {
@@ -33,9 +33,9 @@ export const loginUser = async (email, password, recaptchaToken) => {
   }
 };
 
-export const getTourOffers = async (token, page = 1) => {
+export const getTourOffers = async (token, limit = 10, offset = 0) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/admin/tour_offers?page=${page}&per_page=10`, {
+    const response = await fetch(`${API_URL}/api/v1/admin/tour_offers?limit=${limit}&offset=${offset}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -170,3 +170,17 @@ export const createTourOffer = async (token, formData) => {
     throw error;
   }
 }; 
+
+export const getDestinations = async (limit = 12, offset = 0) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/web/tour_offers?limit=${limit}&offset=${offset}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
