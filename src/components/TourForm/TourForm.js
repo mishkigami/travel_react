@@ -106,6 +106,102 @@ const DateInput = styled.input`
   }
 `;
 
+const TravelersContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+`;
+
+const TravelerGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TravelerLabel = styled.label`
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+  display: block;
+`;
+
+const CounterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+`;
+
+const CounterButton = styled.button`
+  background: #f8f9fa;
+  border: none;
+  padding: 12px 15px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: #666;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background: #e9ecef;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const CounterDisplay = styled.div`
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: white;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const ChildrenAgesContainer = styled.div`
+  margin-top: 15px;
+  grid-column: 1 / -1;
+`;
+
+const ChildrenAgesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+`;
+
+const ChildAgeGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ChildLabel = styled.label`
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 5px;
+  font-weight: 500;
+`;
+
+const AgeSelect = styled.select`
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  
+  &:focus {
+    outline: none;
+    border-color: #ff6b6b;
+  }
+`;
+
 const TourForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -114,6 +210,9 @@ const TourForm = () => {
     destination: '',
     startDate: '',
     endDate: '',
+    adults: 2,
+    children: 0,
+    childrenAges: [],
     budget: ''
   });
 
@@ -148,6 +247,49 @@ const TourForm = () => {
       }
       
       return newData;
+    });
+  };
+
+  // Обработчики для изменения количества путешественников
+  const handleAdultsChange = (increment) => {
+    setFormData(prev => ({
+      ...prev,
+      adults: Math.max(1, prev.adults + increment)
+    }));
+  };
+
+  const handleChildrenChange = (increment) => {
+    setFormData(prev => {
+      const newChildren = Math.max(0, prev.children + increment);
+      const newChildrenAges = [...prev.childrenAges];
+      
+      // Если увеличиваем количество детей, добавляем новые возрасты
+      if (newChildren > prev.children) {
+        for (let i = prev.children; i < newChildren; i++) {
+          newChildrenAges.push('');
+        }
+      }
+      // Если уменьшаем, удаляем лишние возрасты
+      else if (newChildren < prev.children) {
+        newChildrenAges.splice(newChildren);
+      }
+      
+      return {
+        ...prev,
+        children: newChildren,
+        childrenAges: newChildrenAges
+      };
+    });
+  };
+
+  const handleChildAgeChange = (index, age) => {
+    setFormData(prev => {
+      const newChildrenAges = [...prev.childrenAges];
+      newChildrenAges[index] = age;
+      return {
+        ...prev,
+        childrenAges: newChildrenAges
+      };
     });
   };
 
@@ -195,6 +337,74 @@ const TourForm = () => {
             onChange={handleChange}
             required
           />
+          <TravelersContainer>
+            <TravelerGroup>
+              <TravelerLabel>Взрослые</TravelerLabel>
+              <CounterContainer>
+                <CounterButton 
+                  type="button"
+                  onClick={() => handleAdultsChange(-1)}
+                  disabled={formData.adults <= 1}
+                >
+                  −
+                </CounterButton>
+                <CounterDisplay>{formData.adults}</CounterDisplay>
+                <CounterButton 
+                  type="button"
+                  onClick={() => handleAdultsChange(1)}
+                  disabled={formData.adults >= 10}
+                >
+                  +
+                </CounterButton>
+              </CounterContainer>
+            </TravelerGroup>
+            
+            <TravelerGroup>
+              <TravelerLabel>Дети</TravelerLabel>
+              <CounterContainer>
+                <CounterButton 
+                  type="button"
+                  onClick={() => handleChildrenChange(-1)}
+                  disabled={formData.children <= 0}
+                >
+                  −
+                </CounterButton>
+                <CounterDisplay>{formData.children}</CounterDisplay>
+                <CounterButton 
+                  type="button"
+                  onClick={() => handleChildrenChange(1)}
+                  disabled={formData.children >= 6}
+                >
+                  +
+                </CounterButton>
+              </CounterContainer>
+            </TravelerGroup>
+            
+            {formData.children > 0 && (
+              <ChildrenAgesContainer>
+                <TravelerLabel>Возраст детей</TravelerLabel>
+                <ChildrenAgesGrid>
+                  {formData.childrenAges.map((age, index) => (
+                    <ChildAgeGroup key={index}>
+                      <ChildLabel>{index + 1}-й ребенок</ChildLabel>
+                      <AgeSelect
+                        value={age}
+                        onChange={(e) => handleChildAgeChange(index, e.target.value)}
+                        required
+                      >
+                        <option value="">Выберите возраст</option>
+                        {Array.from({ length: 17 }, (_, i) => i + 1).map(ageOption => (
+                          <option key={ageOption} value={ageOption}>
+                            {ageOption} {ageOption === 1 ? 'год' : ageOption < 5 ? 'года' : 'лет'}
+                          </option>
+                        ))}
+                      </AgeSelect>
+                    </ChildAgeGroup>
+                  ))}
+                </ChildrenAgesGrid>
+              </ChildrenAgesContainer>
+            )}
+          </TravelersContainer>
           <DateRangeContainer>
             <div>
               <DateLabel>Дата заезда</DateLabel>
