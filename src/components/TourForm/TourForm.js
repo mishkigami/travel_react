@@ -71,13 +71,50 @@ const Button = styled.button`
   }
 `;
 
+const DateRangeContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+`;
+
+const DateLabel = styled.label`
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+  display: block;
+`;
+
+const DateInput = styled.input`
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  
+  &:focus {
+    outline: none;
+    border-color: #ff6b6b;
+  }
+  
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    color: #ff6b6b;
+  }
+`;
+
 const TourForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     destination: '',
-    dates: '',
+    startDate: '',
+    endDate: '',
     budget: ''
   });
 
@@ -117,6 +154,26 @@ const TourForm = () => {
       [name]: value
     }));
   };
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      
+      // Валидация: дата окончания не может быть раньше даты начала
+      if (name === 'startDate' && newData.endDate && value > newData.endDate) {
+        newData.endDate = '';
+      }
+      if (name === 'endDate' && newData.startDate && value < newData.startDate) {
+        return prev; // Не обновляем, если дата некорректна
+      }
+      
+      return newData;
+    });
+  };
+
+  // Получаем сегодняшнюю дату для минимального значения
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <Section>
@@ -166,13 +223,30 @@ const TourForm = () => {
               </option>
             ))}
           </Select>
-          <Input
-            type="text"
-            name="dates"
-            placeholder="Предпочтительные даты"
-            value={formData.dates}
-            onChange={handleChange}
-          />
+          <DateRangeContainer>
+            <div>
+              <DateLabel>Дата заезда</DateLabel>
+              <DateInput
+                type="date"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleDateChange}
+                min={today}
+                required
+              />
+            </div>
+            <div>
+              <DateLabel>Дата выезда</DateLabel>
+              <DateInput
+                type="date"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleDateChange}
+                min={formData.startDate || today}
+                required
+              />
+            </div>
+          </DateRangeContainer>
           <Select
             name="budget"
             value={formData.budget}
@@ -181,8 +255,9 @@ const TourForm = () => {
           >
             <option value="">Выберите бюджет</option>
             <option value="economy">До 100 000 ₽</option>
-            <option value="standard">100 000 - 200 000 ₽</option>
-            <option value="luxury">Более 200 000 ₽</option>
+            <option value="standard_1">100 000 - 250 000 ₽</option>
+            <option value="standard_2">250 000 - 500 000 ₽</option>
+            <option value="luxury">Более 500 000 ₽</option>
           </Select>
           <Button type="submit">Отправить заявку</Button>
         </FormContainer>
