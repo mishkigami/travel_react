@@ -158,7 +158,7 @@ const Header = () => {
         </LogoContainer>
         
         <NavLinks>
-          <Link to="/about">О нас</Link>
+          <Link to="/about">Наша команда</Link>
           <Link to="/tour-selection">Подбор тура</Link>
 
 
@@ -169,7 +169,7 @@ const Header = () => {
         </MenuButton>
         
         <MobileNavLinks isOpen={isMenuOpen}>
-          <Link to="/about" onClick={closeMenu}>О нас</Link>
+          <Link to="/about" onClick={closeMenu}>Наша команда</Link>
           <Link to="/tour-selection" onClick={closeMenu}>Подбор тура</Link>
 
 
