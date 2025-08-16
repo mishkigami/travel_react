@@ -161,7 +161,7 @@ const Header = () => {
           <Link to="/about">О нас</Link>
           <Link to="/tour-selection">Подбор тура</Link>
 
-          <Link to="/contacts">Контакты</Link>
+
         </NavLinks>
         
         <MenuButton onClick={toggleMenu}>
@@ -172,7 +172,7 @@ const Header = () => {
           <Link to="/about" onClick={closeMenu}>О нас</Link>
           <Link to="/tour-selection" onClick={closeMenu}>Подбор тура</Link>
 
-          <Link to="/contacts" onClick={closeMenu}>Контакты</Link>
+
         </MobileNavLinks>
       </Nav>
     </HeaderContainer>
