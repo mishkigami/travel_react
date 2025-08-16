@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import { getDestinations } from '../../services/api';
+import { useState } from 'react';
 
 const Section = styled.section`
   padding: 80px 20px;
@@ -118,29 +117,9 @@ const TourForm = () => {
     budget: ''
   });
 
-  const [destinations, setDestinations] = useState([]);
-  const [loadingDestinations, setLoadingDestinations] = useState(true);
 
-  // Загрузка направлений при монтировании компонента
-  useEffect(() => {
-    const fetchDestinations = async () => {
-      try {
-        setLoadingDestinations(true);
-        const response = await getDestinations(100, 0); // Загружаем больше данных для полного списка
-        const destinationsData = response.destinations || response.data || [];
-        
-        // Извлекаем уникальные названия направлений
-        const uniqueDestinations = [...new Set(destinationsData.map(item => item.title))];
-        setDestinations(uniqueDestinations);
-      } catch (error) {
-        console.error('Error fetching destinations:', error);
-      } finally {
-        setLoadingDestinations(false);
-      }
-    };
 
-    fetchDestinations();
-  }, []);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -208,21 +187,14 @@ const TourForm = () => {
             onChange={handleChange}
             required
           />
-          <Select
+          <Input
+            type="text"
             name="destination"
+            placeholder="Куда хотите поехать?"
             value={formData.destination}
             onChange={handleChange}
             required
-          >
-            <option value="">
-              {loadingDestinations ? 'Загрузка направлений...' : 'Выберите направление'}
-            </option>
-            {destinations.map((destination, index) => (
-              <option key={index} value={destination}>
-                {destination}
-              </option>
-            ))}
-          </Select>
+          />
           <DateRangeContainer>
             <div>
               <DateLabel>Дата заезда</DateLabel>
