@@ -22,14 +22,64 @@ const Nav = styled.nav`
   align-items: center;
 `;
 
-const Logo = styled(Link)`
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
+const LogoContainer = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 15px;
   z-index: 1001;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
   
   &:hover {
-    color: #666;
+    opacity: 0.8;
+  }
+  
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
+  
+  @media (max-width: 360px) {
+    gap: 8px;
+  }
+`;
+
+const LogoImage = styled.img`
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+  
+  @media (max-width: 768px) {
+    height: 60px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 55px;
+  }
+  
+  @media (max-width: 360px) {
+    height: 50px;
+  }
+`;
+
+const LogoText = styled.span`
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.4rem;
+  }
+  
+  @media (max-width: 360px) {
+    display: none;
   }
 `;
 
@@ -102,7 +152,10 @@ const Header = () => {
   return (
     <HeaderContainer>
       <Nav>
-        <Logo to="/" onClick={closeMenu}>Уникальные путешествия</Logo>
+        <LogoContainer to="/" onClick={closeMenu}>
+          <LogoImage src="/logo.jpg" alt="Уникальные путешествия" />
+          <LogoText>Уникальные путешествия</LogoText>
+        </LogoContainer>
         
         <NavLinks>
           <Link to="/about">О нас</Link>

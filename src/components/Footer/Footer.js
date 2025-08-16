@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -14,11 +13,18 @@ const FooterContainer = styled.footer`
 `;
 
 const FooterContent = styled.div`
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
 `;
 
 const FooterSection = styled.div`
@@ -58,23 +64,13 @@ const SocialLinks = styled.div`
       color: #ff6b6b;
     }
   }
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #ff6b6b;
-    }
+  
+  @media (max-width: 768px) {
+    justify-content: center;
   }
 `;
+
+
 
 const Copyright = styled.div`
   text-align: center;
@@ -122,15 +118,7 @@ const Footer = () => {
           </ContactInfo>
         </FooterSection>
 
-        <FooterSection>
-          <h3>Навигация</h3>
-          <NavLinks>
-            <Link to="/about">О нас</Link>
-            <Link to="/tour-selection">Подбор тура</Link>
 
-            <Link to="/contacts">Контакты</Link>
-          </NavLinks>
-        </FooterSection>
       </FooterContent>
       
       <Copyright>
