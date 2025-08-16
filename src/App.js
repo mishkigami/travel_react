@@ -8,7 +8,7 @@ import Home from './pages/Home/Home';
 import About from './pages/About/About';
 import Contacts from './pages/Contacts/Contacts';
 import TourSelection from './pages/TourSelection/TourSelection';
-import Partners from './pages/Partners/Partners';
+
 import Login from './pages/Login/Login';
 import GlobalStyles from './styles/GlobalStyles';
 import AdminTourOffers from './pages/Admin/TourOffers';
@@ -35,7 +35,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/tour-selection" element={<TourSelection />} />
-          <Route path="/partners" element={<Partners />} />
+
           <Route path="/login" element={<Login />} />
         </Route>
         

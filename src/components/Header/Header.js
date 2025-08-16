@@ -102,12 +102,12 @@ const Header = () => {
   return (
     <HeaderContainer>
       <Nav>
-        <Logo to="/" onClick={closeMenu}>TROPKINA_TOUR</Logo>
+        <Logo to="/" onClick={closeMenu}>Уникальные путешествия</Logo>
         
         <NavLinks>
           <Link to="/about">О нас</Link>
           <Link to="/tour-selection">Подбор тура</Link>
-          <Link to="/partners">Партнеры</Link>
+
           <Link to="/contacts">Контакты</Link>
         </NavLinks>
         
@@ -118,7 +118,7 @@ const Header = () => {
         <MobileNavLinks isOpen={isMenuOpen}>
           <Link to="/about" onClick={closeMenu}>О нас</Link>
           <Link to="/tour-selection" onClick={closeMenu}>Подбор тура</Link>
-          <Link to="/partners" onClick={closeMenu}>Партнеры</Link>
+
           <Link to="/contacts" onClick={closeMenu}>Контакты</Link>
         </MobileNavLinks>
       </Nav>

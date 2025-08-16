@@ -5,7 +5,7 @@ import TourForm from '../../components/TourForm/TourForm';
 import PopularDestinations from '../../components/PopularDestinations/PopularDestinations';
 import Advantages from '../../components/Advantages/Advantages';
 import Reviews from '../../components/Reviews/Reviews';
-// import Partners from '../../components/Partners/Partners';
+
 
 const HeroSection = styled.section`
   height: 100vh;
@@ -71,7 +71,7 @@ const Home = () => {
       <PopularDestinations />
       <Advantages />
       <Reviews />
-      {/* <Partners /> */}
+
       <div ref={formRef}>
         <TourForm />
       </div>

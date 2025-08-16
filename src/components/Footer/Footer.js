@@ -90,7 +90,7 @@ const Footer = () => {
       <FooterContent>
         <FooterSection>
           <h3>О компании</h3>
-          <p>TROPKINA_TOUR - ваш надежный партнер в организации незабываемых путешествий. Мы создаем уникальные туры с учетом ваших пожеланий.</p>
+          <p>Уникальные путешествия - ваш надежный помощник в организации незабываемых путешествий. Мы создаем уникальные туры с учетом ваших пожеланий.</p>
           <SocialLinks>
             <a href="https://t.me/youraccount" target="_blank" rel="noopener noreferrer">
               <TelegramIcon />
@@ -127,14 +127,14 @@ const Footer = () => {
           <NavLinks>
             <Link to="/about">О нас</Link>
             <Link to="/tour-selection">Подбор тура</Link>
-            <Link to="/partners">Партнерам</Link>
+
             <Link to="/contacts">Контакты</Link>
           </NavLinks>
         </FooterSection>
       </FooterContent>
       
       <Copyright>
-        © {new Date().getFullYear()} TROPKINA_TOUR. Все права защищены.
+        © {new Date().getFullYear()} Уникальные путешествия. Все права защищены.
       </Copyright>
     </FooterContainer>
   );
