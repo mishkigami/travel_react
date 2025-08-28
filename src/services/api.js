@@ -293,3 +293,53 @@ export const deleteBooking = async (token, id) => {
     throw error;
   }
 };
+
+export const getCompanyInfo = async (token) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/admin/general_companies`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Ошибка при получении информации о компании');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Get Company Info API Error:', error);
+    throw error;
+  }
+};
+
+export const updateCompanyInfo = async (token, companyData) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/admin/general_companies`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        general_company: companyData
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.errors?.join(', ') || 'Ошибка при обновлении информации о компании');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Update Company Info API Error:', error);
+    throw error;
+  }
+};

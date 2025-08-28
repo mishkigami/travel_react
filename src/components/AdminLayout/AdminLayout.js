@@ -32,6 +32,12 @@ const AdminLayout = ({ children, backLink, title }) => {
             >
               Бронирования
             </NavLink>
+            <NavLink 
+              onClick={() => navigate('/admin/company')}
+              $active={location.pathname.includes('/admin/company')}
+            >
+              Компания
+            </NavLink>
           </NavSection>
         </NavContainer>
       </AdminNavBar>

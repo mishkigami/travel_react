@@ -15,6 +15,7 @@ import AdminTourOffers from './pages/Admin/TourOffers';
 import AdminTourShow from './pages/Admin/TourOffers/Show';
 import NewTourOffer from './pages/Admin/TourOffers/New';
 import AdminBookings from './pages/Admin/Bookings';
+import AdminGeneralCompany from './pages/Admin/GeneralCompany';
 import AllDestinations from './pages/AllDestinations/AllDestinations';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/admin/tour-offers/:id" element={<AdminTourShow />} />
         <Route path="/admin/tour-offers/new" element={<NewTourOffer />} />
         <Route path="/admin/bookings" element={<AdminBookings />} />
+        <Route path="/admin/company" element={<AdminGeneralCompany />} />
         <Route path="/destinations" element={<AllDestinations />} />
       </Routes>
     </Router>
