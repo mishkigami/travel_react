@@ -184,3 +184,112 @@ export const getDestinations = async (limit = 12, offset = 0) => {
     throw error;
   }
 };
+
+export const createBooking = async (bookingData) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/web/bookings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        customer: {
+          full_name: bookingData.name,
+          phone: bookingData.phone,
+          email: bookingData.email
+        },
+        booking: {
+          description: bookingData.destination,
+          date_start: bookingData.startDate,
+          date_end: bookingData.endDate,
+          budget: bookingData.budget,
+          adult_count: bookingData.adults,
+          children_count: bookingData.children,
+          children_ages: bookingData.childrenAges || [],
+          status: 'pending'
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Ошибка при создании бронирования');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Create Booking API Error:', error);
+    throw error;
+  }
+};
+
+export const getBookings = async (token) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/admin/bookings`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Ошибка при получении списка бронирований');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Get Bookings API Error:', error);
+    throw error;
+  }
+};
+
+export const updateBooking = async (token, id, bookingData) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/admin/bookings/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        booking: bookingData
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Ошибка при обновлении бронирования');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Update Booking API Error:', error);
+    throw error;
+  }
+};
+
+export const deleteBooking = async (token, id) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/admin/bookings/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Ошибка при удалении бронирования');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Delete Booking API Error:', error);
+    throw error;
+  }
+};

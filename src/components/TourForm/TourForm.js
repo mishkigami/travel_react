@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { createBooking } from '../../services/api';
 
 const Section = styled.section`
   padding: 80px 20px;
@@ -68,6 +69,31 @@ const Button = styled.button`
   &:hover {
     background-color: #ff5252;
   }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const StatusMessage = styled.div`
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  text-align: center;
+  
+  ${props => props.type === 'success' && `
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  `}
+  
+  ${props => props.type === 'error' && `
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  `}
 `;
 
 const DateRangeContainer = styled.div`
@@ -216,13 +242,80 @@ const TourForm = () => {
     budget: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
 
 
 
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Здесь будет логика отправки формы
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // Преобразуем бюджет в числовое значение
+      const budgetValue = getBudgetValue(formData.budget);
+      
+      const bookingData = {
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        destination: formData.destination,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        adults: formData.adults,
+        children: formData.children,
+        childrenAges: formData.childrenAges.filter(age => age !== '').map(age => parseInt(age)),
+        budget: budgetValue
+      };
+
+      await createBooking(bookingData);
+      
+      setSubmitStatus('success');
+      // Очищаем форму после успешной отправки
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        destination: '',
+        startDate: '',
+        endDate: '',
+        adults: 2,
+        children: 0,
+        childrenAges: [],
+        budget: ''
+      });
+      
+      // Автоматически скрываем сообщение об успехе через 5 секунд
+      setTimeout(() => setSubmitStatus(null), 5000);
+      
+    } catch (error) {
+      console.error('Ошибка при отправке формы:', error);
+      setSubmitStatus('error');
+      
+      // Автоматически скрываем сообщение об ошибке через 5 секунд
+      setTimeout(() => setSubmitStatus(null), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Функция для преобразования бюджета в числовое значение
+  const getBudgetValue = (budgetRange) => {
+    switch (budgetRange) {
+      case 'economy':
+        return 100000;
+      case 'standard_1':
+        return 250000;
+      case 'standard_2':
+        return 500000;
+      case 'luxury':
+        return 1000000;
+      default:
+        return 0;
+    }
   };
 
   const handleChange = (e) => {
@@ -305,6 +398,17 @@ const TourForm = () => {
           data-aos="fade-up"
           data-aos-delay="100"
         >
+          {submitStatus === 'success' && (
+            <StatusMessage type="success">
+              ✅ Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
+            </StatusMessage>
+          )}
+          
+          {submitStatus === 'error' && (
+            <StatusMessage type="error">
+              ❌ Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.
+            </StatusMessage>
+          )}
           <Input
             type="text"
             name="name"
@@ -441,7 +545,9 @@ const TourForm = () => {
             <option value="standard_2">250 000 - 500 000 ₽</option>
             <option value="luxury">Более 500 000 ₽</option>
           </Select>
-          <Button type="submit">Отправить заявку</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Отправляем...' : 'Отправить заявку'}
+          </Button>
         </FormContainer>
       </Container>
     </Section>

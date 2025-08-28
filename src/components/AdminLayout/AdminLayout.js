@@ -1,20 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AdminLayout = ({ children, backLink, title }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <>
       <AdminNavBar>
         <NavContainer>
-          {backLink && (
-            <BackLink onClick={() => navigate(backLink)}>
-              <ArrowIcon>←</ArrowIcon>
-              {title || 'Назад'}
-            </BackLink>
-          )}
+          <NavSection>
+            {backLink && (
+              <BackLink onClick={() => navigate(backLink)}>
+                <ArrowIcon>←</ArrowIcon>
+                {title || 'Назад'}
+              </BackLink>
+            )}
+          </NavSection>
+          
+          <NavSection>
+            <NavLink 
+              onClick={() => navigate('/admin/tour-offers')}
+              $active={location.pathname.includes('/admin/tour-offers')}
+            >
+              Туры
+            </NavLink>
+            <NavLink 
+              onClick={() => navigate('/admin/bookings')}
+              $active={location.pathname.includes('/admin/bookings')}
+            >
+              Бронирования
+            </NavLink>
+          </NavSection>
         </NavContainer>
       </AdminNavBar>
       
@@ -45,6 +63,36 @@ const NavContainer = styled.div`
   padding: 0 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const NavSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const NavLink = styled.button`
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  ${props => props.$active ? `
+    background: #ff6b6b;
+    color: white;
+  ` : `
+    color: #666;
+    
+    &:hover {
+      background: #f8f9fa;
+      color: #333;
+    }
+  `}
 `;
 
 const BackLink = styled.button`
